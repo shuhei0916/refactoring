@@ -30,6 +30,7 @@ function statement (invoice, plays) {
     let totalAmount = 0;
     let volumeCredits = 0;
     let result = `Statement for ${invoice.customer}\n`;
+    // Intl.NumberFormatはjsの組み込みオブジェクトで、数値を言語に応じて適切な形式に変換するために使用される。
     const format = new Intl.NumberFormat("en-US",
                           { style: "currency", currency: "USD",
                             minimumFractionDigits: 2 }).format;
@@ -52,7 +53,7 @@ function statement (invoice, plays) {
         }
         thisAmount += 300 * perf.audience;
         break;
-      default:
+      default: // switch文の中でほかの全てのcase条件に一致しなかった場合に実行されるセクション
           throw new Error(`unknown type: ${play.type}`);
       }
   
@@ -75,3 +76,7 @@ console.log(invoices[0])
 console.log(plays.hamlet)
 console.log(statement(invoices[0], plays));
 // console.log(statement())
+
+for (let perf of invoices[0].performances) {
+  console.log(perf);
+}
