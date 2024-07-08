@@ -31,7 +31,7 @@ function playFor(aPerformance) {
 }
 
 // 関数の戻り値の変数はresultとする
-function amountFor(aPerformance, play) {
+function amountFor(aPerformance) {
   let result = 0;
   switch (playFor(aPerformance).type) {
     case "tragedy":
@@ -63,7 +63,7 @@ function statement (invoice, plays) {
                             minimumFractionDigits: 2 }).format;
   
     for (let perf of invoice.performances) {
-      let thisAmount = amountFor(perf, playFor(perf));
+      let thisAmount = amountFor(perf);
   
       // add volume credits
       volumeCredits += Math.max(perf.audience - 30, 0);
@@ -71,8 +71,8 @@ function statement (invoice, plays) {
       if ("comedy" === playFor(perf).type) volumeCredits += Math.floor(perf.audience / 5);
   
       // print line for this order
-      result += `  ${playFor(perf).name}: ${format(thisAmount/100)} (${perf.audience} seats)\n`;
-      totalAmount += thisAmount;
+      result += `  ${playFor(perf).name}: ${format(amountFor(perf)/100)} (${perf.audience} seats)\n`;
+      totalAmount += amountFor(perf);
     }
     result += `Amount owed is ${format(totalAmount/100)}\n`;
     result += `You earned ${volumeCredits} credits\n`;
