@@ -28,13 +28,10 @@ const plays = {
 
 function statement (invoice, plays) {
     let result = `Statement for ${invoice.customer}\n`;
-    // Intl.NumberFormatはjsの組み込みオブジェクトで、数値を言語に応じて適切な形式に変換するために使用される。
-    
     for (let perf of invoice.performances) {  
       // 注文の内訳を出力
       result += `  ${playFor(perf).name}: ${usd(amountFor(perf))} (${perf.audience} seats)\n`;
     }
-    
     result += `Amount owed is ${usd(totalAmount())}\n`;
     result += `You earned ${totalVolumeCredits()} credits\n`;
     return result;
@@ -82,6 +79,7 @@ function statement (invoice, plays) {
     }
     
     function usd(aNumber) {
+      // Intl.NumberFormatはjsの組み込みオブジェクトで、数値を言語に応じて適切な形式に変換するために使用される。
       return new Intl.NumberFormat("en-US",
         { style: "currency", currency: "USD",
           minimumFractionDigits: 2 }).format(aNumber);
