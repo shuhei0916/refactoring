@@ -26,8 +26,6 @@ const plays = {
     }
   ];
 
-
-
 function statement (invoice, plays) {
     let result = `Statement for ${invoice.customer}\n`;
     // Intl.NumberFormatはjsの組み込みオブジェクトで、数値を言語に応じて適切な形式に変換するために使用される。
@@ -42,11 +40,11 @@ function statement (invoice, plays) {
     return result;
 
     function totalAmount() {
-      let totalAmount = 0;
+      let result = 0;
       for (let perf of invoice.performances) {
-        totalAmount += amountFor(perf);
+        result += amountFor(perf);
       }
-      return totalAmount;
+      return result;
     }
 
     function playFor(aPerformance) {
@@ -90,11 +88,11 @@ function statement (invoice, plays) {
     }
     
     function totalVolumeCredits() {
-      let volumeCredits = 0;
+      let result = 0;
       for (let perf of invoice.performances) {
-        volumeCredits += volumeCreditsFor(perf);
+        result += volumeCreditsFor(perf);
       }
-      return volumeCredits;
+      return result;
     }
 }
 
