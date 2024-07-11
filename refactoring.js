@@ -27,13 +27,18 @@ const invoices = [
 ];
 
 function statement(invoice, plays) {
+  return renderPlainText(createSteatmentData(invoice, plays));
+}
+
+function createSteatmentData(invoice, plays) {
   const statementData = {};
   statementData.customer = invoice.customer;
   statementData.performances = invoice.performances.map(enrichPerformance);
   statementData.totalAmount = totalAmount(statementData);
   statementData.totalVolumeCredits = totalVolumeCredits(statementData);
-  console.log("statementData: ", statementData);
-  return renderPlainText(statementData, plays);
+  // console.log("statementData: ", statementData);
+  return statementData;
+  // return renderPlainText(statementData, plays);
 
   function enrichPerformance(aPerformance) {
     const result = Object.assign({}, aPerformance);
@@ -86,7 +91,6 @@ function statement(invoice, plays) {
 }
 
 function renderPlainText(data, plays) {
-
   let result = `Statement for ${data.customer}\n`;
   for (let perf of data.performances) {
     // 注文の内訳を出力
@@ -104,8 +108,6 @@ function renderPlainText(data, plays) {
         minimumFractionDigits: 2
       }).format(aNumber);
   }
-
-
 }
 
 console.log("hehe");
