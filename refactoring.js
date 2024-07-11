@@ -30,7 +30,8 @@ function statement(invoice, plays) {
   const statementData = {};
   statementData.customer = invoice.customer;
   statementData.performances = invoice.performances.map(enrichPerformance);
-  console.log("hoge: ", statementData);
+  console.log("statementData: ", statementData);
+  // console.log("statementData: ", );
   return renderPlainText(statementData, plays);
 
   function enrichPerformance(aPerformance) {
@@ -40,7 +41,7 @@ function statement(invoice, plays) {
   }
 
   function playFor(aPerformance) {
-    return plays[aPerformance.plaID];
+    return plays[aPerformance.playID];
   }
 }
 
@@ -50,7 +51,7 @@ function renderPlainText(data, plays) {
   let result = `Statement for ${data.customer}\n`;
   for (let perf of data.performances) {
     // 注文の内訳を出力
-    result += `  ${playFor(perf).name}: ${usd(amountFor(perf))} (${perf.audience} seats)\n`;
+    result += `  ${perf.play.name}: ${usd(amountFor(perf))} (${perf.audience} seats)\n`;
   }
   result += `Amount owed is ${usd(totalAmount())}\n`;
   result += `You earned ${totalVolumeCredits()} credits\n`;
@@ -64,14 +65,14 @@ function renderPlainText(data, plays) {
     return result;
   }
 
-  function playFor(aPerformance) {
-    return plays[aPerformance.playID];
-  }
+  // function playFor(aPerformance) {
+  //   return plays[aPerformance.playID];
+  // }
 
   // 関数の戻り値の変数はresultとする
   function amountFor(aPerformance) {
     let result = 0;
-    switch (playFor(aPerformance).type) {
+    switch (aPerformance.play.type) {
       case "tragedy":
         result = 40000;
         if (aPerformance.audience > 30) {
@@ -86,7 +87,7 @@ function renderPlainText(data, plays) {
         result += 300 * aPerformance.audience;
         break;
       default: // switch文の中でほかの全てのcase条件に一致しなかった場合に実行されるセクション
-        throw new Error(`unknown type: ${playFor(aPerformance).type}`);
+        throw new Error(`unknown type: ${aPerformance.play.type}`);
     }
     return result;
   }
@@ -94,7 +95,7 @@ function renderPlainText(data, plays) {
   function volumeCreditsFor(aPerformance) {
     let result = 0;
     result += Math.max(aPerformance.audience - 30, 0);
-    if ("comedy" === playFor(aPerformance).type) result += Math.floor(aPerformance.audience / 5);
+    if ("comedy" === aPerformance.play.type) result += Math.floor(aPerformance.audience / 5);
     return result;
   }
 
