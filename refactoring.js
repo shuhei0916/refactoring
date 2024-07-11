@@ -30,6 +30,8 @@ function statement(invoice, plays) {
   const statementData = {};
   statementData.customer = invoice.customer;
   statementData.performances = invoice.performances.map(enrichPerformance);
+  statementData.totalAmount = totalAmount(statementData);
+  statementData.totalVolumeCredits = totalVolumeCredits(statementData);
   console.log("statementData: ", statementData);
   return renderPlainText(statementData, plays);
 
@@ -45,7 +47,7 @@ function statement(invoice, plays) {
     return plays[aPerformance.playID];
   }
 
-    function amountFor(aPerformance) {
+  function amountFor(aPerformance) {
     let result = 0;
     switch (aPerformance.play.type) {
       case "tragedy":
@@ -73,6 +75,22 @@ function statement(invoice, plays) {
     if ("comedy" === aPerformance.play.type) result += Math.floor(aPerformance.audience / 5);
     return result;
   }
+
+  function totalAmount(data) {
+    let result = 0;
+    for (let perf of data.performances) {
+      result += perf.amount;
+    }
+    return result;
+  }
+
+  function totalVolumeCredits(data) {
+    let result = 0;
+    for (let perf of data.performances) {
+      result += perf.volumeCredits;
+    }
+    return result;
+  }
 }
 
 
@@ -83,20 +101,9 @@ function renderPlainText(data, plays) {
     // 注文の内訳を出力
     result += `  ${perf.play.name}: ${usd(perf.amount)} (${perf.audience} seats)\n`;
   }
-  result += `Amount owed is ${usd(totalAmount())}\n`;
-  result += `You earned ${totalVolumeCredits()} credits\n`;
+  result += `Amount owed is ${usd(data.totalAmount)}\n`;
+  result += `You earned ${data.totalVolumeCredits} credits\n`;
   return result;
-
-  function totalAmount() {
-    let result = 0;
-    for (let perf of data.performances) {
-      result += perf.amount;
-    }
-    return result;
-  }
-
-
-
 
   function usd(aNumber) {
     // Intl.NumberFormatはjsの組み込みオブジェクトで、数値を言語に応じて適切な形式に変換するために使用される。
@@ -107,13 +114,7 @@ function renderPlainText(data, plays) {
       }).format(aNumber);
   }
 
-  function totalVolumeCredits() {
-    let result = 0;
-    for (let perf of data.performances) {
-      result += perf.volumeCredits;
-    }
-    return result;
-  }
+
 }
 
 console.log("hehe");
