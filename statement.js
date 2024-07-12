@@ -27,7 +27,7 @@ const invoices = [
 ];
 
 function statement(invoice, plays) {
-  return renderPlainText(createSteatmentData(invoice, plays));
+  return renderPlainText(createStatementData(invoice, plays));
 }
 
 function renderPlainText(data, plays) {
@@ -66,26 +66,13 @@ function usd(aNumber) {
     }).format(aNumber);
 }
 
-
-
 class PerformanceCalculator {
   constructor(aPerformance, aPlay) {
     this.performance = aPerformance;
     this.play = aPlay;
-
   }
   get amount() {
-    let result = 0;
-    switch (this.play.type) {
-      case "tragedy":
-        throw '想定外の呼び出し';
-      case "comedy":
-
-        break;
-      default: // switch文の中でほかの全てのcase条件に一致しなかった場合に実行されるセクション
-        throw new Error(`unknown type: ${this.play.type}`);
-    }
-    return result;
+    throw new Error('サブクラスの責務');
   }
 }
 
@@ -133,7 +120,7 @@ export default function createStatementData(invoice, plays) {
     const calculator = createPerformanceCalculator(aPerformance, playFor(aPerformance));
     const result = Object.assign({}, aPerformance);
     result.play = calculator.play;
-    result.amount = amountFor(result);
+    result.amount = calculator.amount;
     result.volumeCredits = volumeCreditsFor(result);
     return result;
   }
@@ -142,9 +129,9 @@ export default function createStatementData(invoice, plays) {
     return plays[aPerformance.playID];
   }
 
-  function amountFor(aPerformance) {
-    return new PerformanceCalculator(aPerformance, playFor(aPerformance)).amount;
-  }
+  // function amountFor(aPerformance) {
+  //   return new PerformanceCalculator(aPerformance, playFor(aPerformance)).amount;
+  // }
 
   function volumeCreditsFor(aPerformance) {
     let result = 0;
