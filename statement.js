@@ -133,7 +133,29 @@ class PerformanceCalculator {
   constructor(aPerformance, aPlay) {
     this.performance = aPerformance;
     this.play = aPlay;
+
   }
+  get amount() {
+    let result = 0;
+    switch (this.play.type) {
+        case "tragedy":
+            result = 40000;
+            if (this.performance.audience > 30) {
+                result += 1000 * (this.performance.audience - 30);
+            }
+            break;
+        case "comedy":
+            result = 30000;
+            if (this.performance.audience > 20) {
+                result += 10000 + 500 * (this.performances.audience - 20);
+            }
+            result += 300 * this.performance.audience;
+            break;
+        default: // switch文の中でほかの全てのcase条件に一致しなかった場合に実行されるセクション
+            throw new Error(`unknown type: ${this.play.type}`);
+    }
+    return result;
+}
 }
 
 function displayResult(html) {
