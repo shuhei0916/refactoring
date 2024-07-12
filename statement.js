@@ -128,11 +128,12 @@ export default function createStatementData(invoice, plays) {
   }
 }
 
-console.log("hoge");
-
-
-console.log("hello");
+function displayResult(html) {
+  const resultElement = document.getElementById('result');
+  result.innerHTML = html;
+}
 
 // console.log(invoices[0], plays);
 console.log(createStatementData(invoices[0], plays));
-console.log(htmlStatement(invoices[0], plays));
+
+displayResult(htmlStatement(invoices[0], plays));
