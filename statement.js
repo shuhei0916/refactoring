@@ -76,7 +76,6 @@ export default function createStatementData(invoice, plays) {
   statementData.totalVolumeCredits = totalVolumeCredits(statementData);
   console.log("statementData: ", statementData);
   return statementData;
-  // return renderPlainText(statementData, plays);
 
   function enrichPerformance(aPerformance) {
     const calculator = new PerformanceCalculator(aPerformance, playFor(aPerformance));
@@ -92,25 +91,7 @@ export default function createStatementData(invoice, plays) {
   }
 
   function amountFor(aPerformance) {
-      let result = 0;
-      switch (aPerformance.play.type) {
-          case "tragedy":
-              result = 40000;
-              if (aPerformance.audience > 30) {
-                  result += 1000 * (aPerformance.audience - 30);
-              }
-              break;
-          case "comedy":
-              result = 30000;
-              if (aPerformance.audience > 20) {
-                  result += 10000 + 500 * (aPerformance.audience - 20);
-              }
-              result += 300 * aPerformance.audience;
-              break;
-          default: // switch文の中でほかの全てのcase条件に一致しなかった場合に実行されるセクション
-              throw new Error(`unknown type: ${aPerformance.play.type}`);
-      }
-      return result;
+    return new PerformanceCalculator(aPerformance, playFor(aPerformance)).amount;
   }
 
   function volumeCreditsFor(aPerformance) {
@@ -147,7 +128,7 @@ class PerformanceCalculator {
         case "comedy":
             result = 30000;
             if (this.performance.audience > 20) {
-                result += 10000 + 500 * (this.performances.audience - 20);
+                result += 10000 + 500 * (this.performance.audience - 20);
             }
             result += 300 * this.performance.audience;
             break;
@@ -160,7 +141,7 @@ class PerformanceCalculator {
 
 function displayResult(html) {
   const resultElement = document.getElementById('result');
-  result.innerHTML = html;
+  resultElement.innerHTML = html;
 }
 
 // console.log(invoices[0], plays);
