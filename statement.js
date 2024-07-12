@@ -79,6 +79,7 @@ export default function createStatementData(invoice, plays) {
   // return renderPlainText(statementData, plays);
 
   function enrichPerformance(aPerformance) {
+    const calculater = new PerformanceCalculator(aPerformance);
       const result = Object.assign({}, aPerformance);
       result.play = playFor(result);
       result.amount = amountFor(result);
@@ -125,6 +126,12 @@ export default function createStatementData(invoice, plays) {
 
   function totalVolumeCredits(data) {
       return data.performances.reduce((total, p) => total + p.volumeCredits, 0);
+  }
+}
+
+class PerformanceCalculator {
+  constructor(aPerformance) {
+    this.performance = aPerformance;
   }
 }
 
