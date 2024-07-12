@@ -67,6 +67,58 @@ function usd(aNumber) {
 }
 
 
+
+class PerformanceCalculator {
+  constructor(aPerformance, aPlay) {
+    this.performance = aPerformance;
+    this.play = aPlay;
+
+  }
+  get amount() {
+    let result = 0;
+    switch (this.play.type) {
+      case "tragedy":
+        throw '想定外の呼び出し';
+      case "comedy":
+
+        break;
+      default: // switch文の中でほかの全てのcase条件に一致しなかった場合に実行されるセクション
+        throw new Error(`unknown type: ${this.play.type}`);
+    }
+    return result;
+  }
+}
+
+class TragedyCalculator extends PerformanceCalculator {
+  get amount() {
+    let result = 40000;
+    if (this.performance.audience > 30) {
+      result += 1000 * (this.performance.audience - 30);
+    }
+    return result;
+  }
+}
+class ComedyCalculator extends PerformanceCalculator {
+  get amount() {
+    let result = 30000;
+    if (this.performance.audience > 20) {
+      result += 10000 + 500 * (this.performance.audience - 20);
+    }
+    result += 300 * this.performance.audience;
+    return result;
+  }
+}
+
+
+function createPerformanceCalculator(aPerformance, aPlay) {
+  switch (aPlay.type) {
+    case "tragedy": return new TragedyCalculator(aPerformance, aPlay);
+    case "comedy": return new ComedyCalculator(aPerformance, aPlay);
+    default:
+      throw new Error(`未知の演劇の種類: ${aPlay.type}`);
+  }
+}
+
 // 別ファイルに移動できなかったので、とりあえずここに書きます。
 export default function createStatementData(invoice, plays) {
   const statementData = {};
@@ -79,15 +131,15 @@ export default function createStatementData(invoice, plays) {
 
   function enrichPerformance(aPerformance) {
     const calculator = createPerformanceCalculator(aPerformance, playFor(aPerformance));
-      const result = Object.assign({}, aPerformance);
-      result.play = calculator.play;
-      result.amount = amountFor(result);
-      result.volumeCredits = volumeCreditsFor(result);
-      return result;
+    const result = Object.assign({}, aPerformance);
+    result.play = calculator.play;
+    result.amount = amountFor(result);
+    result.volumeCredits = volumeCreditsFor(result);
+    return result;
   }
 
   function playFor(aPerformance) {
-      return plays[aPerformance.playID];
+    return plays[aPerformance.playID];
   }
 
   function amountFor(aPerformance) {
@@ -95,52 +147,19 @@ export default function createStatementData(invoice, plays) {
   }
 
   function volumeCreditsFor(aPerformance) {
-      let result = 0;
-      result += Math.max(aPerformance.audience - 30, 0);
-      if ("comedy" === aPerformance.play.type) result += Math.floor(aPerformance.audience / 5);
-      return result;
+    let result = 0;
+    result += Math.max(aPerformance.audience - 30, 0);
+    if ("comedy" === aPerformance.play.type) result += Math.floor(aPerformance.audience / 5);
+    return result;
   }
 
   function totalAmount(data) {
-      return data.performances.reduce((total, p) => total + p.amount, 0);
+    return data.performances.reduce((total, p) => total + p.amount, 0);
   }
 
   function totalVolumeCredits(data) {
-      return data.performances.reduce((total, p) => total + p.volumeCredits, 0);
+    return data.performances.reduce((total, p) => total + p.volumeCredits, 0);
   }
-}
-
-function createPerformanceCalculator(aPerformance, aPlay) {
-  return new PerformanceCalculator(aPerformance, aPlay);
-}
-
-class PerformanceCalculator {
-  constructor(aPerformance, aPlay) {
-    this.performance = aPerformance;
-    this.play = aPlay;
-
-  }
-  get amount() {
-    let result = 0;
-    switch (this.play.type) {
-        case "tragedy":
-            result = 40000;
-            if (this.performance.audience > 30) {
-                result += 1000 * (this.performance.audience - 30);
-            }
-            break;
-        case "comedy":
-            result = 30000;
-            if (this.performance.audience > 20) {
-                result += 10000 + 500 * (this.performance.audience - 20);
-            }
-            result += 300 * this.performance.audience;
-            break;
-        default: // switch文の中でほかの全てのcase条件に一致しなかった場合に実行されるセクション
-            throw new Error(`unknown type: ${this.play.type}`);
-    }
-    return result;
-}
 }
 
 function displayResult(html) {
