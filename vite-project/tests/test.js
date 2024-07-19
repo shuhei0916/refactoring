@@ -2,10 +2,12 @@ import assert from 'assert';
 
 describe('Array', () => {
   describe('#indexOf()', () => {
-    it('指定された値が見つからない場合は -1 を返します。', () => {
+    it('should return -1 when the value is not present', () => {
       assert.equal([1, 2, 3].indexOf(4), -1);
     });
   });
 });
 
-// assert.equal(0, 1);
+it ('hoge hoge', () => {
+  assert.equal(0, 1);
+})
