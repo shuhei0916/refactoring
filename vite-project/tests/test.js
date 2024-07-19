@@ -7,3 +7,5 @@ describe('Array', () => {
     });
   });
 });
+
+// assert.equal(0, 1);
