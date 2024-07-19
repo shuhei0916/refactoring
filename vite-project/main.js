@@ -12,7 +12,6 @@ function isLeapYear(year) {
 
 
 
-
 // document.querySelector('#app').innerHTML = `
 //   <div>
 //     <a href="https://vitejs.dev" target="_blank">
