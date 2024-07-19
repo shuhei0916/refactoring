@@ -1,4 +1,5 @@
 import assert from 'assert';
+import { describe } from 'node:test';
 
 describe('Array', () => {
   describe('#indexOf()', () => {
@@ -8,6 +9,9 @@ describe('Array', () => {
   });
 });
 
-it ('hoge hoge', () => {
-  assert.equal(0, 1);
+describe('HoHo', () => {
+  it ('hoge hoge', () => {
+    assert.equal(0, 1);
+  })
+
 })
