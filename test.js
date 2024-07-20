@@ -1,5 +1,6 @@
 import assert from 'assert';
 import {Province, sampleProvinceData} from './province.js';
+import { hasUncaughtExceptionCaptureCallback } from 'process';
 // import { hasUncaughtExceptionCaptureCallback } from 'process';
 
 describe('province', function() {
@@ -51,5 +52,18 @@ describe('no producers', function() {
   });
   it('profit', function() {
     assert.equal(noProducers.profit, 0);
+  });
+});
+
+describe('string for producers', function() {
+  it('', function() {
+    const data = {
+      name: "String producers",
+      producers: "", 
+      demand: 30,
+      price:20
+    };
+    const prov = new Province(data);
+    assert.equal(prov.shortfall, 0);
   });
 });
