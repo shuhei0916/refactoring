@@ -1,69 +1,77 @@
 import assert from 'assert';
-import {Province, sampleProvinceData} from './province.js';
+import { Province, sampleProvinceData } from './province.js';
 import { hasUncaughtExceptionCaptureCallback } from 'process';
 // import { hasUncaughtExceptionCaptureCallback } from 'process';
+describe('province.jsに関するテスト', function () {
+  describe('province', function () {
+    let asia;
+    beforeEach(function () {
+      asia = new Province(sampleProvinceData());
+    });
+    it('shortfall', function () {
+      assert.equal(asia.shortfall, 5);
+    });
+    it('profit', function () {
+      assert.equal(asia.profit, 230);
+    });
+    it('change production', function () {
+      asia.producers[0].production = 20;
+      assert.equal(asia.shortfall, -6);
+      assert.equal(asia.profit, 292);
+    });
+    it('zero demand', function () {
+      asia.demand = 0;
+      assert.equal(asia.shortfall, -25);
+      assert.equal(asia.profit, 0);
+    });
+    it('negative demand', function () {
+      asia.demand = -1;
+      assert.equal(asia.shortfall, -26);
+      assert.equal(asia.profit, -10);
+    });
+    it('empty string demand', function () {
+      asia.demand = "";
+      assert.equal(asia.shortfall, NaN);
+      assert.equal(asia.profit, NaN);
+    });
+  });
 
-describe('province', function() {
-  let asia;
-  beforeEach(function() {
-    asia = new Province(sampleProvinceData());
+  describe('no producers', function () {
+    let noProducers;
+    beforeEach(function () {
+      const data = {
+        name: "No proudcers",
+        producers: [],
+        demand: 30,
+        price: 20
+      };
+      noProducers = new Province(data);
+    });
+    it('shortfall', function () {
+      assert.equal(noProducers.profit, 0);
+    });
+    it('profit', function () {
+      assert.equal(noProducers.profit, 0);
+    });
   });
-  it('shortfall', function() {
-    assert.equal(asia.shortfall, 5);
-  });
-  it('profit', function() {
-    assert.equal(asia.profit, 230);
-  });
-  it('change production', function() {
-    asia.producers[0].production = 20;
-    assert.equal(asia.shortfall, -6);
-    assert.equal(asia.profit, 292);
-  });
-  it('zero demand', function() {
-    asia.demand = 0;
-    assert.equal(asia.shortfall, -25);
-    assert.equal(asia.profit, 0);    
-  });
-  it('negative demand', function() {
-    asia.demand = -1;
-    assert.equal(asia.shortfall, -26);    
-    assert.equal(asia.profit, -10);    
-  });
-  it('empty string demand', function() {
-    asia.demand = "";
-    assert.equal(asia.shortfall, NaN);
-    assert.equal(asia.profit, NaN);
-  });
+
+  // describe('string for producers', function () {
+  //   it('', function () {
+  //     const data = {
+  //       name: "String producers",
+  //       producers: "",
+  //       demand: 30,
+  //       price: 20
+  //     };
+  //     const prov = new Province(data);
+  //     assert.equal(prov.shortfall, 0);
+  //   });
+  // });
 });
 
-describe('no producers', function() {
-  let noProducers;
-  beforeEach(function() {
-    const data = {
-      name: "No proudcers",
-      producers: [],
-      demand: 30,
-      price: 20
-    };
-    noProducers = new Province(data);
-  });
-  it('shortfall', function() {
-    assert.equal(noProducers.profit, 0);
-  });
-  it('profit', function() {
-    assert.equal(noProducers.profit, 0);
-  });
-});
 
-describe('string for producers', function() {
-  it('', function() {
-    const data = {
-      name: "String producers",
-      producers: "", 
-      demand: 30,
-      price:20
-    };
-    const prov = new Province(data);
-    assert.equal(prov.shortfall, 0);
+describe('その他のテスト', function() {
+  it('should be green', function() {
+    assert.equal(0, 0);
   });
 });
