@@ -3,13 +3,14 @@ import {Province, sampleProvinceData} from './province.js';
 import { hasUncaughtExceptionCaptureCallback } from 'process';
 
 describe('province', function() {
+  let asia;
+  beforeEach(function() {
+    asia = new Province(sampleProvinceData());
+  });
   it('shortfall', function() {
-    const asia = new Province(sampleProvinceData());
     assert.equal(asia.shortfall, 5);
-  })
+  });
   it('profit', function() {
-    const asia = new Province(sampleProvinceData());
-    // assert.equal(actual, expected);
     assert.equal(asia.profit, 230);
-  })
-})
+  });
+});
