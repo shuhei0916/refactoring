@@ -23,7 +23,18 @@ describe('province', function() {
     assert.equal(asia.shortfall, -25);
     assert.equal(asia.profit, 0);    
   });
+  it('negative demand', function() {
+    asia.demand = -1;
+    assert.equal(asia.shortfall, -26);    
+    assert.equal(asia.profit, -10);    
+  });
+  it('empty string demand', function() {
+    asia.demand = "";
+    assert.equal(asia.shortfall, NaN);
+    assert.equal(asia.profit, NaN);
+  });
 });
+
 describe('no producers', function() {
   let noProducers;
   beforeEach(function() {
